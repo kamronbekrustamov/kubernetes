@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15.2-alpine
+    container_name: postgres
+    volumes:
+      - ./postgres/create_dbs.sh:/docker-entrypoint-initdb.d/create_dbs.sh
+      - ./postgres/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${DATASOURCE_PASSWORD}
+      - POSTGRES_MULTIPLE_DATABASES=users,posts
+
+  users:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    container_name: users
+    depends_on:
+      - db
+    environment:
+      - USERS_DATASOURCE_URL
+      - DATASOURCE_USERNAME
+      - DATASOURCE_PASSWORD
+    ports:
+      - "8080:8080"
+
+  posts:
+    build:
+      context: ./posts
+      dockerfile: Dockerfile
+    container_name: posts
+    depends_on:
+      - db
+      - users
+    environment:
+      - POSTS_DATASOURCE_URL
+      - DATASOURCE_USERNAME
+      - DATASOURCE_PASSWORD
+      - USERS_URL=http://users/8080
+    ports:
+      - "8081:8080"
+
+networks:
+  main-network:
+    driver: bridge

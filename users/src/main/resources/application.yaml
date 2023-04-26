@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: users
+  datasource:
+    url: ${USERS_DATASOURCE_URL:jdbc:postgresql://localhost:5432/users}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+  jpa:
+    show-sql: true
+    format-sql: true
+    hibernate:
+      format-sql: true
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
