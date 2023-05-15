@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     environment:
-      - USERS_DATASOURCE_URL
+      - USERS_DATASOURCE_URL=jdbc:postgresql://db:5432/users
       - DATASOURCE_USERNAME
       - DATASOURCE_PASSWORD
     ports:
@@ -37,7 +37,7 @@ services:
       - db
       - users
     environment:
-      - POSTS_DATASOURCE_URL
+      - POSTS_DATASOURCE_URL=jdbc:postgresql://db:5432/posts
       - DATASOURCE_USERNAME
       - DATASOURCE_PASSWORD
       - USERS_URL=http://users/8080
