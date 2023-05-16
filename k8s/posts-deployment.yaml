@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-deployment
+  namespace: k8s-program
+  labels:
+    app: posts-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: kamronbekrustamov/posts:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-secrets
+                  key: DATASOURCE_USERNAME
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-secrets
+                  key: DATASOURCE_PASSWORD
+            - name: POSTS_DATASOURCE_URL
+              value: jdbc:postgresql://postgresql-clusterip-svc:5432/posts
+            - name: USERS_URL
+              value: http://users-nodeport-svc:8080
