@@ -1,4 +1,3 @@
-./postgres/pgdata
 HELP.md
 .gradle
 build/
@@ -36,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+./posts/build/
+./posts/users/
+./postgres/pgdata
