@@ -16,4 +16,6 @@ public class PostDto {
     @NotEmpty
     private String text;
     private LocalDate postedAt;
+    @NotEmpty
+    private String topic;
 }
