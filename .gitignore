@@ -39,3 +39,4 @@ out/
 ./posts/build/
 ./posts/users/
 ./postgres/pgdata/
+./postgres/pgdata/*
