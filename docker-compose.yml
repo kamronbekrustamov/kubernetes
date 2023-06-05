@@ -40,7 +40,7 @@ services:
       - POSTS_DATASOURCE_URL=jdbc:postgresql://db:5432/posts
       - DATASOURCE_USERNAME
       - DATASOURCE_PASSWORD
-      - USERS_URL=http://users/8080
+      - USERS_URL=http://users:8080
     ports:
       - "8081:8080"
 
