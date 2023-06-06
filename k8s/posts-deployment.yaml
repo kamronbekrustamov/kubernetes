@@ -7,6 +7,8 @@ metadata:
     app: posts-deployment
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: posts
@@ -17,7 +19,7 @@ spec:
     spec:
       containers:
         - name: posts
-          image: kamronbekrustamov/posts:1.0.0
+          image: kamronbekrustamov/posts:1.0.1
           ports:
             - containerPort: 8080
           env:
@@ -35,3 +37,25 @@ spec:
               value: jdbc:postgresql://postgresql-clusterip-svc:5432/posts
             - name: USERS_URL
               value: http://users-nodeport-svc:8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            failureThreshold: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
