@@ -4,6 +4,9 @@ metadata:
   name: postgresql-statefulset
   namespace: k8s-program
 spec:
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       app: postgresql
@@ -37,6 +40,25 @@ spec:
               subPath: create_dbs.sh
             - name: postgresql-pv-storage
               mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command: ["psql", "-U", "postgres", "-d", "users", "-c", "SELECT 1"]
+            failureThreshold: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            exec:
+              command: ["psql", "-U", "postgres", "-d", "users", "-c", "SELECT 1"]
+            failureThreshold: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+          startupProbe:
+            exec:
+              command: ["psql", "-U", "postgres", "-d", "users", "-c", "SELECT 1"]
+            initialDelaySeconds: 10
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
       volumes:
         - name: config
           configMap:
