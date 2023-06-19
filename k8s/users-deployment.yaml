@@ -34,7 +34,7 @@ spec:
                   name: datasource-secrets
                   key: DATASOURCE_PASSWORD
             - name: USERS_DATASOURCE_URL
-              value: jdbc:postgresql://postgresql-clusterip-svc:5432/users
+              value: jdbc:postgresql://postgresql-svc:5432/users
           livenessProbe:
             httpGet:
               path: /health

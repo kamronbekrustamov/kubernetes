@@ -16,13 +16,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: users-clusterip-svc
+                name: users-svc
                 port:
                   number: 8080
           - path: /posts(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: posts-clusterip-svc
+                name: posts-svc
                 port:
                   number: 8080
