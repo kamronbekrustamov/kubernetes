@@ -1,0 +1,15 @@
+namespace: k8s-program
+
+users:
+  replicaCount: 2
+  serviceName: users-svc
+  port: 8080
+posts:
+  replicaCount: 2
+  serviceName: posts-svc
+  port: 8080
+postgresql:
+  replicaCount: 1
+  serviceName: postgresql-svc
+  port: 5432
+

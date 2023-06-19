@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+  namespace: {{ .Values.namespace}}
+  labels:
+    app: users-deployment
+spec:
+  replicas: {{ .Values.users.replicaCount }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users
+          image: kamronbekrustamov/users:1.0.1
+          ports:
+            - containerPort: {{ .Values.users.port }}
+          env:
+            - name: DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-secrets
+                  key: DATASOURCE_USERNAME
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-secrets
+                  key: DATASOURCE_PASSWORD
+            - name: USERS_DATASOURCE_URL
+              value: jdbc:postgresql://{{ .Values.postgresql.serviceName }}:{{ .Values.postgresql.port }}/users
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.users.port }}
+            failureThreshold: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.users.port }}
+            failureThreshold: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.users.port }}
+            initialDelaySeconds: 10
+            failureThreshold: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
