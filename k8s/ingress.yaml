@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: local-ingress-nginx
+  namespace: k8s-program
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /users(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: users-nodeport-svc
+                port:
+                  number: 8080
+          - path: /posts(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: posts-nodeport-svc
+                port:
+                  number: 8080
