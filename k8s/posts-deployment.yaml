@@ -36,7 +36,7 @@ spec:
             - name: POSTS_DATASOURCE_URL
               value: jdbc:postgresql://postgresql-clusterip-svc:5432/posts
             - name: USERS_URL
-              value: http://users-nodeport-svc:8080
+              value: http://users-clusterip-svc:8080
           livenessProbe:
             httpGet:
               path: /health
